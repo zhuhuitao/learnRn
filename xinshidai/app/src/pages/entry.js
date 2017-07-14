@@ -39,7 +39,7 @@ componentDidMount(){
             this.props.navigation.navigate('Login')
             return
           }
-          this.props.navigation.navigate('Tab')
+          this.props.navigation.navigate('Login')
         },(error) => {
             this.props.navigation.navigate('Login')
         })

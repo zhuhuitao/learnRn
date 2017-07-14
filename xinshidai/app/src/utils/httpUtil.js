@@ -25,5 +25,27 @@ export default class HttpUtil{
     }).done()
   }
 
+  static post (router,params,successCallBack,failedCallBack){
+    let paramsArray = []
+    Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+    var body = paramsArray.join('&')
+      console.log(body)
+    fetch(router,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/x-www-form-urlencoded',
+      },
+      body:body
+    }).then((response) => {
+      return response.text()
+    }).then((data) => {
+      console.log(data)
+      successCallBack(data)
+    }).catch((error) => {
+      console.log(error+"shibaile")
+      failedCallBack(error)
+    }).done()
+  }
+
 
 }

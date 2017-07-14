@@ -17,12 +17,10 @@ import {
 } from '../../values/style'
 
 import Dimen from '../../values/constant'
-
 import LoginButton from '../../values/origenButton'
-
 import GrayButton from '../../values/grayButton'
-
 import HttpUtil from '../utils/httpUtil'
+import BToast from '../utils/common'
 
 
 
@@ -36,6 +34,8 @@ export default class Login extends Component {
     super(props);
     this.account = ''
     this.password = ''
+    this.recodeAccount = ''
+    this.recodePassword = ''
     this.stae = {reloadView:false}
   }
 
@@ -46,26 +46,26 @@ export default class Login extends Component {
         if (result === null) {
           return
         }
-        this.account = data.account
-        this.password = data.password
-        this.setState({reloadView:true},this.login)
+        this.recodeAccount = '123'
+        this.recodePassword = '123'
+        //this.setState({reloadView:true},this.login)
       }
     })
   }
 
   login(){
     if (/^1[3|4|5|7|8][0-9]{9}$/.test(this.account) === false) {
-      Alert.alert('请输入正确的账号','',[{text:'确定'}])
+      BToast.show('请输入正确的手机号码')
       return
     }
     if (this.password.length < 6 || this.password.length > 16) {
-      Alert.alert('密码长度为6-16字符','',[{text:'确定'}])
+      BToast.show('密码长度为6-16字符')
       return
     }
     var params = {'upass':this.password,'umobile':this.account}
     HttpUtil.get('MobileLogin',params,(response) => {
       if (response === undefined) {
-        Alert.alert('账号或密码错误，请重新登录','',[{text:'确定'}])
+        BToast.show('账号或密码错误，请重新登录')
         return
       }
       console.log(response[0])
@@ -73,8 +73,7 @@ export default class Login extends Component {
       AsyncStorage.setItem('loginData',JSON.stringify(loginData),(error) =>{})
       this.props.navigation.navigate('Tab')
     },(error) => {
-      console.log('========='+error)
-          Alert.alert('网络错误，请检查您的网络','',[{text:'确定'}])
+          BToast.show('网络错误，请检查网络')
     })
   }
 
@@ -89,7 +88,7 @@ export default class Login extends Component {
             <View style = {{...InputStyle}}>
               <Image source = {require('../../values/drawable/login_user.png')} style = {styles.headImage}/>
               <TextInput placeholder='用户名'
-              value = {this.account}
+              //value = {this.recodeAccount}
               placeholderTextColor={textMainColor}
               style = {styles.textInput}
               underlineColorAndroid='transparent'
@@ -101,7 +100,7 @@ export default class Login extends Component {
               <TextInput placeholder='密码'
               placeholderTextColor = {textMainColor}
               style = {styles.textInput}
-              value = {this.password}
+            //  value = {this.recodePassword}
               secureTextEntry = {true}
               underlineColorAndroid = 'transparent'
               onChangeText = {(text) => this.password = text}/>
